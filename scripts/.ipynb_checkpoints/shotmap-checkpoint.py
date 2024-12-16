@@ -4,6 +4,8 @@ import matplotlib.font_manager as font_manager
 from mplsoccer import VerticalPitch
 import understatapi
 import argparse
+import sys
+sys.path.insert(1,'../fonts/')
 
 client = understatapi.UnderstatClient()
 
@@ -22,6 +24,11 @@ def get_players(player,league='EPL',season='2024'):
 
     return all_players[all_players.player_name == player]['id'].values[0]
     
+
+def load_font():
+    font_path = 'fonts/Arvo/Arvo-Regular.ttf'
+    font_props = font_manager.FontProperties(fname=font_path)
+    return font_props
 
 def get_shot_data(player_id):
     "Gets all shot data for the player across all seasons."
@@ -57,7 +64,7 @@ def create_shotmap(df, player_name, season,background_color='#0C0D0E', figsize=(
     ### CREATE FIGURE
     fig = plt.figure(figsize=figsize)
     fig.patch.set_facecolor(background_color)
-
+    font_props = load_font()
     
     ### ax1, THE TOP TEXTS
     year = int(season)
@@ -68,18 +75,18 @@ def create_shotmap(df, player_name, season,background_color='#0C0D0E', figsize=(
     ax1.set_xlim(0, 1)
     ax1.set_ylim(0, 1)
     
-    ax1.text(x=0.5, y=.85, s=player_name, fontsize=20, color='white', ha='center')
-    ax1.text(x=0.5, y=.7, s=f'{season_text}', fontsize=14, color='white', ha='center')
-    ax1.text(x=0.25, y=.5, s='Low quality chance', fontsize=12, color='white', ha='center')
-    ax1.text(x=0.75, y=.5, s='High quality chance', fontsize=12, color='white', ha='center')
+    ax1.text(x=0.5, y=.85, s=player_name, fontsize=20, color='white', ha='center',fontproperties=font_props)
+    ax1.text(x=0.5, y=.7, s=f'{season_text}', fontsize=14, color='white', ha='center',fontproperties=font_props)
+    ax1.text(x=0.25, y=.5, s='Low quality chance', fontsize=12, color='white', ha='center',fontproperties=font_props)
+    ax1.text(x=0.75, y=.5, s='High quality chance', fontsize=12, color='white', ha='center',fontproperties=font_props)
 
     circles = [(0.37, 100), (0.42, 200), (0.48, 300), (0.54, 400), (0.6, 500)]
     for x, s in circles:
         ax1.scatter(x, 0.53, s=s, color=background_color, edgecolor='white', linewidth=.8)
 
-    ax1.text(x=.45, y=.27, s='Goal', fontsize=10, color='white', ha='right')
+    ax1.text(x=.45, y=.27, s='Goal', fontsize=10, color='white', ha='right',fontproperties=font_props)
     ax1.scatter(0.47, 0.3, s=100, color='red', edgecolor='white', linewidth=.8, alpha=0.7)
-    ax1.text(x=.55, y=.27, s='No Goal', fontsize=10, color='white', ha='left')
+    ax1.text(x=.55, y=.27, s='No Goal', fontsize=10, color='white', ha='left',fontproperties=font_props)
     ax1.scatter(0.53, 0.3, s=100, color=background_color, edgecolor='white', linewidth=.8)
 
     ax1.set_axis_off()
@@ -110,8 +117,8 @@ def create_shotmap(df, player_name, season,background_color='#0C0D0E', figsize=(
     ]
 
     for label, value, x_pos in stats:
-        ax3.text(x=x_pos, y=.5, s=label, fontsize=20, color='white', ha='left')
-        ax3.text(x=x_pos, y=0, s=str(value), fontsize=16, color='red', ha='left')
+        ax3.text(x=x_pos, y=.5, s=label, fontsize=20, color='white', ha='left',fontproperties=font_props)
+        ax3.text(x=x_pos, y=0, s=str(value), fontsize=16, color='red', ha='left',fontproperties=font_props)
 
     ax3.set_axis_off()
     return fig

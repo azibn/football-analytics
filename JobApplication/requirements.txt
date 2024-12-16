@@ -1,7 +1,0 @@
-numpy
-pandas
-statsbombpy
-mplsoccer
-matplotlib
-tqdm
-understatapi
