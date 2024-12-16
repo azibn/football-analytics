@@ -10,7 +10,7 @@ sys.path.insert(1,'../fonts/')
 client = understatapi.UnderstatClient()
 
 
-def get_players(player,league='EPL',season='2024'):
+def get_players(player,league,season):
     """
     Get Players from selected league.
 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
 
     
-    pid = get_players(args.player)
+    pid = get_players(args.player,args.league,args.season)
     df = get_shot_data(pid)
 
     seasons = sorted(df['season'].unique()) if args.season.lower() == 'all' else [args.season]
