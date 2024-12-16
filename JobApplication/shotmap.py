@@ -130,12 +130,12 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Create a "The Athletic" style shot map for a player.')
     
-    parser.add_argument('player', type=str, help='Full name of the player e.g: "Bukayo Saka", "Erling Haaland". The player name is taken directly from understat.')
+    parser.add_argument('player', type=str, help='Full name of the player e.g: Bukayo Saka, Erling Haaland.')
     parser.add_argument('--season', type=str, default='2024', 
-                        help='Season to analyse data (default: 2024). The `all` option will create maps for all seasons available for that player.')
+                        help='Season to analyse (default: 2024)')
     parser.add_argument('--league', type=str, default='EPL',
                         help='League name (default: EPL). Other options are Serie A, La Liga, Ligue 1, Bundesliga, RPFL.')
-    parser.add_argument('--save',action='store_true',help='Saves the map as "shotmap_<player>_<season>.png"')
+    parser.add_argument('--save',action='store_true')
     
     
     args = parser.parse_args()
