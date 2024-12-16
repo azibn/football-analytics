@@ -1,3 +1,8 @@
+"""
+Shot map visualisations from players in the PL, La Liga, Bundesliga, Serie A, Ligue 1 and the Russian Premier League. Data is taken using the `understatapi` package. 
+"""
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
@@ -8,13 +13,13 @@ import argparse
 client = understatapi.UnderstatClient()
 
 
-def get_players(player,league='EPL',season='2024'):
+def get_players(player,league,season):
     """
     Get Players from selected league.
 
     player: Full player name (working on specifics e.g: letters with accents, first/last names only etc.)
     league: Default is Premier League
-    season: Season they were playing in the league (default 2024-25 season). ##This doesn't really matter except for those who were
+    season: Season they were playing in the league (default 2024-25 season). ## matters for ex-players e.g Eden Hazard at Chelsea, Harry Kane at Tottenham, etc
     """
 
     ## DATAFRAME OF ALL PLAYERS THAT WERE IN SPECIFIED LEAGUE IN SPECIFIED SEASON
@@ -23,7 +28,7 @@ def get_players(player,league='EPL',season='2024'):
     return all_players[all_players.player_name == player]['id'].values[0]
     
 
-def get_shot_data(player_id):
+def _get_shot_data(player_id):
     "Gets all shot data for the player across all seasons."
     shot_data = client.player(player=str(player_id)).get_shot_data()
     return pd.DataFrame(shot_data)
@@ -37,6 +42,9 @@ def create_shotmap(df, player_name, season,background_color='#0C0D0E', figsize=(
         player_name: Name of the player for the title
         background_color: Color for background (default '#0C0D0E')
         figsize: Size of figure (default (8,12))
+
+    Returns:
+        Figure
     """
     
     ### GET STATISTICS FOR SHOT DATA
@@ -126,7 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--season', type=str, default='2024', 
                         help='Season to analyse (default: 2024)')
     parser.add_argument('--league', type=str, default='EPL',
-                        help='League name (default: EPL). Other options are Serie A, La Liga, Ligue 1.')
+                        help='League name (default: EPL). Other options are Serie A, La Liga, Ligue 1, Bundesliga, RPFL.')
     parser.add_argument('--save',action='store_true')
     
     
@@ -135,8 +143,8 @@ if __name__ == '__main__':
 
 
     
-    pid = get_players(args.player)
-    df = get_shot_data(pid)
+    pid = get_players(args.player,args.league,args.season)
+    df = _get_shot_data(pid)
 
     seasons = sorted(df['season'].unique()) if args.season.lower() == 'all' else [args.season]
     
